@@ -1,5 +1,5 @@
 # Otsikko
-tekstiä **lihavoituna** *kursivoituna*
+normaalia tekstiä **lihavoituna** *kursivoituna*
 
 ## Tehtävät
 ### Viikko 1
