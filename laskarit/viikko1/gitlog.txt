@@ -1,0 +1,113 @@
+commit d1d783cfdb0a637459b9507d3b16826958ac7f71
+Author: FexbYk <>
+Date:   Sat Mar 20 20:30:14 2021 +0200
+
+    tiedostoja2
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 14edbc78d9281583f346e38cd78bb9f4f875a529
+Author: FexbYk <>
+Date:   Sat Mar 20 20:28:48 2021 +0200
+
+    tiedostoja
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit f2a8dcf97d84761eeaba56b5d8e5b7213b814615
+Author: FexbYk <>
+Date:   Sat Mar 20 20:27:15 2021 +0200
+
+    add -p
+
+ eka.txt    | 1 +
+ kolmas.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit bed51d4e402f0b1c3c260a4842f8b0ecde868b8a
+Author: FexbYk <>
+Date:   Sat Mar 20 20:26:01 2021 +0200
+
+    eka
+
+ tiedosto.txt => eka.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit ca21c6682a405903cef6d335637d9273086e5222
+Author: FexbYk <>
+Date:   Sat Mar 20 20:25:42 2021 +0200
+
+    toinen pois
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit a751bb4f0c5ae39c0f76e852615cf1d989657a80
+Author: FexbYk <>
+Date:   Sat Mar 20 20:25:04 2021 +0200
+
+    teksti2
+
+ tiedosto.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit 96e0fc70ac874d296a7e4c4659aba5cf54663db8
+Author: FexbYk <>
+Date:   Sat Mar 20 20:24:42 2021 +0200
+
+    teksti
+
+ tiedosto.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit c6850ad57d98995053dee744b2c4f1767f4ec811
+Author: FexbYk <>
+Date:   Sat Mar 20 20:23:43 2021 +0200
+
+    dir
+
+ stuff/a | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 03b8a9e669278a374df053522a73ae1f5ac2eb69
+Author: FexbYk <>
+Date:   Sat Mar 20 20:23:16 2021 +0200
+
+    muutos
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit bc6c1eedff3833bbd73e30029517b8d52a49505d
+Author: FexbYk <>
+Date:   Sat Mar 20 20:22:43 2021 +0200
+
+    kolmas
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 02fb84aeddbcff0f514124921b4654ff36ad628a
+Author: FexbYk <>
+Date:   Sat Mar 20 20:19:13 2021 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit 48bc36eab0cd2f92e20283e89dfa6495e964a52f
+Author: FexbYk <>
+Date:   Sat Mar 20 20:18:29 2021 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
