@@ -12,7 +12,7 @@ class Chip8:
         self.v = [0 for i in range(16)]
         self.i = 0
         self.pc = 0
-        self.sp = 0
+        self.sp = 0x100
 
         # Timers
         self.dt = 0
@@ -21,7 +21,9 @@ class Chip8:
         # Set to Vx on instruction Fx0A
         # If not -1, halt execution until a keypress and store it to Vx
         self.ld_key_reg = -1
-    
+        
+        self.debugPrint = False
+
     def loadFont(self):
         font = [0xf0, 0x90, 0x90, 0x90, 0xf0, #0
                 0x20, 0x60, 0x20, 0x20, 0x70, #1
@@ -50,14 +52,18 @@ class Chip8:
         self.pc = entrypoint
 
     def write_word(self, addr, data):
-        self.memory[addr] = data & 0xFF
-        self.memory[addr + 1] = data >> 8
+        self.memory[addr + 1] = data & 0xFF
+        self.memory[addr] = data >> 8
 
     def read_word(self, addr):
-        return self.memory[addr] | (self.memory[addr+1] << 8)
+        return self.memory[addr + 1] | (self.memory[addr] << 8)
     
     def exec_next(self):
         inst = instruction.Instruction(self.read_word(self.pc))
+        
+        if self.debugPrint:
+            print("PC:", self.pc, " Registers:", self.v)
+            print("Opcode: ", inst.op)
         self.pc += 2
         inst.execute(self)
 

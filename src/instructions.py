@@ -106,19 +106,16 @@ def instr_rnd(inst, chip8):
     chip8.v[inst.arg1] = random.randint(0, 255) & inst.arg2
 
 def instr_drw(inst, chip8): 
-    addr = chip8.i
-    n = inst.arg3
-    x = chip8.v[inst.arg1]
-    y = chip8.v[inst.arg2]
-    start = y*64 + x
     chip8.v[0xf] = 0
-    for i in range(n):
+    for i in range(inst.arg3 + 1):  #for each row in sprite
+        rowdata = chip8.memory[chip8.i + i]
+        y = (chip8.v[inst.arg2] + i) % 32
         for j in range(8):
-            frameAddr = (start + i*8 + j) % len(chip8.framebuf)
-            bit = (chip8.memory[addr+i] >> j) & 1
-            if bit == 1 and chip8.framebuf[frameAddr] == 1:
+            x = (chip8.v[inst.arg1] + j) % 64
+            pixel = (rowdata >> (7-j)) & 1
+            if pixel and chip8.framebuf[y*64 + x] == 1:
                 chip8.v[0xf] = 1
-            chip8.framebuf[frameAddr] ^= bit
+            chip8.framebuf[y*64 + x] ^= pixel
     
 
 def instr_skp(inst, chip8): 
