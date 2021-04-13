@@ -8,7 +8,8 @@ Sovelluksen avulla käyttäjä voi suorittaa CHIP8-Järjestelmälle tehtyjä ohj
 ## Asennus
 1. Asenna riippuvuudet komennolla:   
 ´poetry install´  
+
 2. Suorita sovellus komennolla:
-´poetry run invoke start´
+´poetry run invoke start´  
 
-
+Tällä hetkellä sovellus suorittaa MAZE-tiedostossa olevan ohjelman, joka piirtää satunnaisen labyrintin.  
