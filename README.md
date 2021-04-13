@@ -2,8 +2,11 @@
 Sovelluksen avulla käyttäjä voi suorittaa CHIP8-Järjestelmälle tehtyjä ohjelmia moderneilla tietokoneilla.  
 
 ## Dokumentaatio
-[Vaatimusmäärittely](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/m%C3%A4%C3%A4rittelydokumentti.md)  
-[Työaikakirjanpito](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/ty%C3%B6aikakirjanpito.md)  
+
+[Määrittelydokumentti](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/m%C3%A4%C3%A4rittelydokumentti.md)
+[Työaikakirjanpito](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/ty%C3%B6aikakirjanpito.md)
+
+
 
 ## Asennus
 1. Asenna riippuvuudet komennolla:   
@@ -13,3 +16,4 @@ Sovelluksen avulla käyttäjä voi suorittaa CHIP8-Järjestelmälle tehtyjä ohj
 ´poetry run invoke start´  
 
 Tällä hetkellä sovellus suorittaa MAZE-tiedostossa olevan ohjelman, joka piirtää satunnaisen labyrintin.  
+
