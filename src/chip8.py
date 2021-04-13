@@ -1,4 +1,4 @@
-#import instruction
+import instruction
 
 class Chip8:
 
@@ -44,7 +44,7 @@ class Chip8:
         for i in range(len(font)):
             self.memory[i] = font[i]
 
-    def loadProgram(self, program : list, entrypoint : int):
+    def loadProgram(self, program, entrypoint):
         for i in range(len(program)):
             self.memory[entrypoint + i] = program[i]
         self.pc = entrypoint
