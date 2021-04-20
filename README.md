@@ -16,7 +16,6 @@ Sovelluksen avulla käyttäjä voi suorittaa CHIP8-Järjestelmälle tehtyjä ohj
 2. Suorita sovellus komennolla:  
 `poetry run invoke start`  
 
-Tällä hetkellä sovellus suorittaa MAZE-tiedostossa olevan ohjelman, joka piirtää satunnaisen labyrintin.  
 
 ## Testaus
 Testit voidaan suorittaa komennolla:  
