@@ -3,7 +3,7 @@ import random
 
 
 def instr_invalid(inst, chip8):
-    print("invalid instruction at:", chip8.pc)
+    print("invalid instruction", "{:04X}".format(inst.raw),"at:", chip8.pc)
 
 
 def instr_sys(inst, chip8):
@@ -13,7 +13,7 @@ def instr_sys(inst, chip8):
 
 def instr_cls(inst, chip8):
     for i in range(len(chip8.framebuf)):
-        chip8.framebuf[i] = 0
+        chip8.framebuf[i] = False
 
 
 def instr_ret(inst, chip8):
@@ -106,6 +106,7 @@ def instr_subn(inst, chip8):
 def instr_shl(inst, chip8):
     chip8.v[0xf] = chip8.v[inst.arg1] >> 7
     chip8.v[inst.arg1] <<= 1
+    chip8.v[inst.arg1] &= 0xff
 
 
 def instr_sne9(inst, chip8):
@@ -127,13 +128,13 @@ def instr_rnd(inst, chip8):
 
 def instr_drw(inst, chip8):
     chip8.v[0xf] = 0
-    for i in range(inst.arg3 + 1):  # for each row in sprite
+    for i in range(inst.arg3):  # for each row in sprite
         rowdata = chip8.memory[chip8.i + i]
         y = (chip8.v[inst.arg2] + i) % 32
         for j in range(8):
             x = (chip8.v[inst.arg1] + j) % 64
-            pixel = (rowdata >> (7-j)) & 1
-            if pixel and chip8.framebuf[y*64 + x] == 1:
+            pixel = ((rowdata >> (7-j)) & 1)
+            if pixel and chip8.framebuf[y*64 + x]:
                 chip8.v[0xf] = 1
             chip8.framebuf[y*64 + x] ^= pixel
 
@@ -147,6 +148,8 @@ def instr_sknp(inst, chip8):
     if not chip8.keys[chip8.v[inst.arg1]]:
         chip8.pc += 2
 
+def instr_ld_vx_dt(inst, chip8):
+    chip8.v[inst.arg1] = chip8.dt
 
 def instr_ld_dt(inst, chip8):
     chip8.dt = chip8.v[inst.arg1]
@@ -177,10 +180,10 @@ def instr_ld_b(inst, chip8):
 
 
 def instr_ld_ptr_i(inst, chip8):
-    for i in range(inst.arg1):
+    for i in range(inst.arg1 + 1):
         chip8.memory[chip8.i + i] = chip8.v[i]
 
 
 def instr_ld_vx_i(inst, chip8):
-    for i in range(inst.arg1):
+    for i in range(inst.arg1 + 1):
         chip8.v[i] = chip8.memory[chip8.i + i]

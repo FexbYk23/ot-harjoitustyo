@@ -48,3 +48,51 @@ class TestInstructionExec(unittest.TestCase):
         c8_exe(0xEE, c8)  # ret
         self.assertEqual(c8.pc, pc)
         self.assertEqual(c8.sp, sp)
+
+    def test_exec_shr(self):
+        c8 = self.chip
+        c8_exe(0x6102, c8) #v1 = 2
+        c8_exe(0x81F6, c8) #shr v1
+        self.assertEqual(c8.v[1], 1)
+        self.assertEqual(c8.v[15], 0)
+        c8_exe(0x81F6, c8)  #shr v1
+        self.assertEqual(c8.v[1], 0)
+        self.assertEqual(c8.v[15], 1)
+
+    def test_exec_shl(self):
+        c8 = self.chip
+        c8_exe(0x6201, c8) #v2 = 1
+        for i in range(7):
+            c8_exe(0x82EE, c8) # v2 <<= 1
+            self.assertEqual(c8.v[2], 1 << (i+1))
+            self.assertEqual(c8.v[15], 0)
+        c8_exe(0x82EE, c8) # v2 <<= 1
+        self.assertEqual(c8.v[2], 0)
+        self.assertEqual(c8.v[15], 1)
+
+    def test_exec_fx33(self):
+        c8 = self.chip
+        c8_exe(0x60FE,c8) #v0 = ff
+        c8_exe(0xA800, c8) #I = 0x800
+        c8_exe(0xF033, c8) #BCD
+        self.assertEqual(c8.memory[0x800], 2)
+        self.assertEqual(c8.memory[0x801], 5)
+        self.assertEqual(c8.memory[0x802], 4)
+        self.assertEqual(c8.i, 0x800)
+        self.assertEqual(c8.v[0], 0xFE)
+
+    def test_exec_fx55(self):
+        c8 = self.chip
+        for i in range(14):
+            c8_exe(0x6000 | (i<<8) | i+1, c8) # v[i] = i+1
+
+        c8_exe(0xA800, c8) #I = 0x800
+        c8_exe(0xF055, c8) # mem[I] = v0
+        self.assertEqual(c8.memory[c8.i], c8.v[0])
+        self.assertEqual(c8.memory[c8.i+1], 0)
+
+        c8_exe(0xF755, c8)
+        self.assertEqual(c8.i, 0x800)
+        for i in range(8):
+            self.assertEqual(c8.memory[c8.i+i], c8.v[i])
+    

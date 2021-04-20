@@ -5,7 +5,7 @@ class Chip8:
 
     def __init__(self):
         self.memory = [0 for i in range(0x1000)]
-        self.framebuf = [0 for i in range(64 * 32)]
+        self.framebuf = [False for i in range(64 * 32)]
         self.keys = [False for i in range(16)]
         self.__load_font()
 
@@ -50,6 +50,12 @@ class Chip8:
         for i in range(len(program)):
             self.memory[entrypoint + i] = program[i]
         self.pc = entrypoint
+    
+    def load_program_file(self, filename, entrypoint):
+        with open(filename, "rb") as f:
+            program = f.read(0x1000-entrypoint)
+            self.load_program(program, entrypoint)
+
 
     def write_word(self, addr, data):
         self.memory[addr + 1] = data & 0xFF
@@ -59,10 +65,38 @@ class Chip8:
         return self.memory[addr + 1] | (self.memory[addr] << 8)
 
     def exec_next(self):
+        if self.ld_key_reg != -1:
+            for i in range(len(self.keys)):
+                if self.keys[i]:
+                    self.v[self.ld_key_reg] = i
+                    self.ld_key_reg = -1
+                    if self.debug_print:
+                        print("Chip8: Key pressed:", i, self.keys)
+                    break
+            
+            if self.ld_key_reg != -1:
+                if self.debug_print:
+                    print("Chip8: Waiting for keypress", self.keys)
+                return
+
+
         inst = instruction.Instruction(self.read_word(self.pc))
 
         if self.debug_print:
             print("PC:", self.pc, " Registers:", self.v)
             print("Opcode: ", inst.op)
+            pass
         self.pc += 2
         inst.execute(self)
+
+    # should be called 60 times/second
+    def update_timers(self):
+        if self.dt > 0:
+            self.dt -= 1
+
+        if self.st > 0:
+            self.st -= 1
+
+
+    def tick(self):
+       pass 

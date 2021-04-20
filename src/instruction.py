@@ -6,6 +6,7 @@ class Instruction:
     def __init__(self, opcode):
 
         self.op = instructions.instr_invalid
+        self.raw = opcode
 
         if opcode == 0xE0:
             self.op = instructions.instr_cls
@@ -96,9 +97,11 @@ class Instruction:
             bot8 = opcode & 0xFF
             self.arg1 = (opcode >> 8) & 0xF
             if bot8 == 7:
-                self.op = instructions.instr_ld_dt
-            elif bot8 == 0x15:
+                self.op = instructions.instr_ld_vx_dt
+            elif bot8 == 0xA:
                 self.op = instructions.instr_ld_key
+            elif bot8 == 0x15:
+                self.op = instructions.instr_ld_dt
             elif bot8 == 0x18:
                 self.op = instructions.instr_ld_st
             elif bot8 == 0x1E:

@@ -89,12 +89,15 @@ class TestInstruction(unittest.TestCase):
         self.assertEqual(Instruction(0xE0A1).op, instructions.instr_sknp)
         self.assertEqual(Instruction(0xE0AF).op, instructions.instr_invalid)
 
-    def test_parse_ld_dt(self):
-        self.assertEqual(Instruction(0xF007).op, instructions.instr_ld_dt)
+    def test_parse_ld_vx_dt(self):
+        self.assertEqual(Instruction(0xF007).op, instructions.instr_ld_vx_dt)
 
     def test_parse_ld_key(self):
-        self.assertEqual(Instruction(0xF015).op, instructions.instr_ld_key)
+        self.assertEqual(Instruction(0xF00A).op, instructions.instr_ld_key)
 
+    def test_parse_ld_dt(self):
+        self.assertEqual(Instruction(0xF015).op, instructions.instr_ld_dt)
+    
     def test_parse_ld_st(self):
         self.assertEqual(Instruction(0xF018).op, instructions.instr_ld_st)
 
