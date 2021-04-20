@@ -4,8 +4,9 @@ from instruction import Instruction
 import instruction
 
 
-def c8_exe(opcode, chip8 : Chip8):
+def c8_exe(opcode, chip8: Chip8):
     Instruction(opcode).execute(chip8)
+
 
 class TestInstructionExec(unittest.TestCase):
 
@@ -21,17 +22,29 @@ class TestInstructionExec(unittest.TestCase):
 
     def test_exec_add(self):
         c8 = self.chip
-        c8_exe(0x6001, c8)  #v0 = 1
-        c8_exe(0x7010, c8)  #v0 += 0x10
+        c8_exe(0x6001, c8)  # v0 = 1
+        c8_exe(0x7010, c8)  # v0 += 0x10
         self.assertEqual(c8.v[0], 0x11)
-        c8_exe(0x70f0, c8) #v0 += 0xf0
-        self.assertEqual(c8.v[0], 1) #overflow
+        c8_exe(0x70f0, c8)  # v0 += 0xf0
+        self.assertEqual(c8.v[0], 1)  # overflow
 
     def test_exec_sub(self):
         c8 = self.chip
-        c8_exe(0x6001, c8) #v0 = 1
-        c8_exe(0x6102, c8) #v1 = 2
-        c8_exe(0x8015, c8) #v0 -= v1
-        self.assertEqual(c8.v[0xF], 0) #carry
-        self.assertEqual(c8.v[0], 0xFF) #overflow
+        c8_exe(0x6001, c8)  # v0 = 1
+        c8_exe(0x6102, c8)  # v1 = 2
+        c8_exe(0x8015, c8)  # v0 -= v1
+        self.assertEqual(c8.v[0xF], 0)  # carry
+        self.assertEqual(c8.v[0], 0xFF)  # overflow
 
+    def test_exec_call(self):
+        c8 = self.chip
+        sp = c8.sp
+        pc = c8.pc
+        c8_exe(0x2300, c8)  # call subroutine at 0x300
+        self.assertEqual(c8.pc, 0x300)
+        self.assertEqual(c8.sp, sp + 2)
+        self.assertEqual(c8.read_word(sp), pc)
+
+        c8_exe(0xEE, c8)  # ret
+        self.assertEqual(c8.pc, pc)
+        self.assertEqual(c8.sp, sp)

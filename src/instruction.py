@@ -4,7 +4,7 @@ import instructions
 
 class Instruction:
     def __init__(self, opcode):
-        
+
         self.op = instructions.instr_invalid
 
         if opcode == 0xE0:
@@ -13,7 +13,6 @@ class Instruction:
         elif opcode == 0xEE:
             self.op = instructions.instr_ret
             return
-        
 
         top4 = opcode >> 12
         if top4 == 0:
@@ -113,10 +112,5 @@ class Instruction:
             elif bot8 == 0x65:
                 self.op = instructions.instr_ld_vx_i
 
-
     def execute(self, chip8):
         self.op(self, chip8)
-
-
-
-
