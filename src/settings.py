@@ -1,5 +1,15 @@
 import configparser
 
+def is_valid_color(color):
+    if not isinstance(color, str):
+        return False
+    if len(color) != 7 or color[0] != "#":
+        return False
+    for i in range(1, 7):
+        if not color[i] in "0123456789abcdefABCDEF":
+            return False
+    return True
+
 class Settings:
     def __init__(self, filename=None):
         self.cfg = configparser.ConfigParser()
@@ -16,6 +26,14 @@ class Settings:
         
         self.entrypoint = int(s["entrypoint"])
         self.entrypoint = min(max(self.entrypoint, 0), 0x1000 - 2)
+        
+        self.fgcolor = s["fgcolor"]
+        if not is_valid_color(self.fgcolor):
+            self.fgcolor = "#ffffff"
+        
+        self.bgcolor = s["bgcolor"]
+        if not is_valid_color(self.bgcolor):
+            self.bgcolor = "#000000"
 
     def load(self, filename):
         self.cfg.read(filename)
@@ -26,6 +44,8 @@ class Settings:
         s = self.cfg["Settings"]
         s["frequency"] = str(self.freq)
         s["entrypoint"] = str(self.entrypoint)
+        s["fgcolor"] = self.fgcolor
+        s["bgcolor"] = self.bgcolor
         for i in range(16):
             s["key_{:01X}".format(i)] = self.keys[i]
 
@@ -49,7 +69,9 @@ class Settings:
                 "key_c":"e",
                 "key_d":"r",
                 "key_e":"t", 
-                "key_f":"y"}
+                "key_f":"y",
+                "fgcolor":"#ffffff",
+                "bgcolor":"#000000"}
         self.load_values_from_cfg()
 
 
@@ -61,3 +83,9 @@ class Settings:
 
     def get_keybinds(self):
         return self.keys
+
+    def get_fgcolor(self):
+        return self.fgcolor
+
+    def get_bgcolor(self):
+        return self.bgcolor
