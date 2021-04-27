@@ -22,7 +22,10 @@ class Chip8:
         # Set to Vx on instruction Fx0A
         # If not -1, halt execution until a keypress and store it to Vx
         self.ld_key_reg = -1
+        
         self.debug_print = False
+        self.halted = False
+        self.halt_reason = ""
 
     def __load_font(self):
         font = [0xf0, 0x90, 0x90, 0x90, 0xf0,  # 0
@@ -58,13 +61,24 @@ class Chip8:
 
 
     def write_word(self, addr, data):
+        if addr + 1 >= len(self.memory):
+            self.halted = True
+            self.halt_reason = f"Out of bounds write to {addr}"
         self.memory[addr + 1] = data & 0xFF
         self.memory[addr] = data >> 8
 
     def read_word(self, addr):
+        if addr + 1 >= len(self.memory):
+            self.halted = True
+            self.halt_reason = f"Out of bounds read from {addr}"
         return self.memory[addr + 1] | (self.memory[addr] << 8)
 
     def exec_next(self):
+        if self.halted:
+            if self.debug_print:
+                print("Chip8 Halted:", self.halt_reason)
+            return
+
         if self.ld_key_reg != -1:
             for i in range(len(self.keys)):
                 if self.keys[i]:
@@ -97,6 +111,3 @@ class Chip8:
         if self.st > 0:
             self.st -= 1
 
-
-    def tick(self):
-       pass 

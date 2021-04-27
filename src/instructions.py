@@ -3,11 +3,14 @@ import random
 
 
 def instr_invalid(inst, chip8):
-    print("invalid instruction", "{:04X}".format(inst.raw),"at:", chip8.pc)
+    chip8.halted = True
+    chip8.halt_reason = "invalid instruction {:04X} at 0x{:04X}".format(inst.raw, chip8.pc)
 
 
 def instr_sys(inst, chip8):
     #not implemented
+    chip8.halted = True
+    chip8.halt_reason = f"Unimplemented sys instruction at {chip8.pc:04X}"
     pass
 
 

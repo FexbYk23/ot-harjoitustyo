@@ -3,26 +3,36 @@ import configparser
 class Settings:
     def __init__(self, filename=None):
         self.cfg = configparser.ConfigParser()
+        self.load_defaults()
         if filename != None:
-            load(filename)
-        if not "Settings" in self.cfg:
-            self.load_default_settings()
-        self.load_values_from_cfg()
+            self.load(filename)
 
     def load_values_from_cfg(self):
-        self.freq = int(self.cfg["Settings"]["frequency"])
-        self.keys = [self.cfg["Settings"]["key_{:01X}".format(i)] for i in range(16)]
+        s = self.cfg["Settings"]
+
+        self.freq = int(s["frequency"])
+        self.freq = min(max(self.freq, 1), 1000)
+        self.keys = [s["key_{:01X}".format(i)] for i in range(16)]
         
-        self.entrypoint = int(self.cfg["Settings"]["entrypoint"])
+        self.entrypoint = int(s["entrypoint"])
+        self.entrypoint = min(max(self.entrypoint, 0), 0x1000 - 2)
 
     def load(self, filename):
         self.cfg.read(filename)
+        if "Settings" in self.cfg:
+            self.load_values_from_cfg()
 
     def save(self, filename):
+        s = self.cfg["Settings"]
+        s["frequency"] = str(self.freq)
+        s["entrypoint"] = str(self.entrypoint)
+        for i in range(16):
+            s["key_{:01X}".format(i)] = self.keys[i]
+
         with open(filename, "w") as f:
             self.cfg.write(f)
 
-    def load_default_settings(self):
+    def load_defaults(self):
         self.cfg["Settings"] = {"frequency":10, "entrypoint":0x200,
                 "key_0":"0",
                 "key_1":"1",
@@ -40,6 +50,7 @@ class Settings:
                 "key_d":"r",
                 "key_e":"t", 
                 "key_f":"y"}
+        self.load_values_from_cfg()
 
 
     def get_frequency(self):
