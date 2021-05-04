@@ -6,10 +6,24 @@ import ui.dialog_manager
 
 
 class SettingsDialog:
+    """Luokka joka kuvaa asetusvalikkoa
+
+    Attributes:
+        window: tk.Toplevel
+        cfg: Settings olio
+        dialogs: DialogManager olio
+        mute: tk.IntVar, joka pitää tietoa mute napin tilasta
+    """
+
     def __init__(self, master, settings, dialogs):
         self.window = tk.Toplevel()
         self.cfg = settings
         self.dialogs = dialogs
+        self.mute = tk.IntVar()
+        if self.cfg.get_mute():
+            self.mute.set(1)
+        else:
+            self.mute.set(0)
 
         tk.Label(self.window, text="Entrypoint:").pack()
         self.entrypoint_entry = self.__create_entry(str(self.cfg.get_entrypoint()))
@@ -22,32 +36,38 @@ class SettingsDialog:
 
         tk.Label(self.window, text="Background color:").pack()
         self.bgcolor_entry = self.__create_entry(self.cfg.get_bgcolor())
-
+        
+        tk.Checkbutton(self.window, text="Mute sound", variable=self.mute).pack()
 
         tk.Button(self.window, text="OK", command=self.__ok).pack()
         tk.Button(self.window, text="Cancel", command=self.__close).pack()
     
     def __create_entry(self, initial_value):
+        """Luo tekstikentän"""
         e = tk.Entry(self.window)
         e.insert(tk.END, initial_value)
         e.pack(padx=10, pady=(0, 10))
         return e
 
     def __close(self):
+        """Sulkee ikkunan tallentamatta asetuksia"""
         self.window.destroy()
         self.dialogs.settings_open = False
 
     def __ok(self):
+        """Tallentaa asetukset jos ne eivät ole virheellisiä"""
         if self.validate_settings():
             self.cfg.freq = int(self.freq_entry.get())
             self.cfg.entrypoint = int(self.entrypoint_entry.get())
             self.cfg.fgcolor = self.fgcolor_entry.get()
             self.cfg.bgcolor = self.bgcolor_entry.get()
+            self.cfg.mute = self.mute.get() == 1
             self.cfg.save("settings.cfg")
             self.window.destroy()
             self.dialogs.settings_open = False
 
     def validate_settings(self):
+        """Tarkastaa onko asetukset kelvollisia ja luo virheilmoituksen jos ei"""
         try:
             if not 0 < int(self.freq_entry.get()) <= 1000:
                 messagebox.showinfo("Error", "Frequency must be between 1 and 1000")
@@ -70,3 +90,4 @@ class SettingsDialog:
             return False
 
         return True
+

@@ -4,6 +4,15 @@ import settings
 import ui.dialog_manager
 
 class ControlsDialog:
+    """Luokka joka kuvaa näppäinasetusvalikkoa
+
+    Attributes:
+        window: tk.Toplevel
+        cfg: Settings olio
+        dialogs: DialogManager olio
+        key_entries: lista eri näppäinten tk.Entry kentistä
+    """
+
     def __init__(self, master, settings, dialogs):
         self.window = tk.Toplevel()
         self.cfg = settings
@@ -21,6 +30,7 @@ class ControlsDialog:
 
 
     def __ok(self):
+        """Tallentaa näppäimet cfg.hen"""
         for i in range(16):
             self.cfg.get_keybinds()[i] = self.key_entries[i].get()
         self.cfg.save("settings.cfg")

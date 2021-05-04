@@ -1,6 +1,11 @@
 import configparser
 
 def is_valid_color(color):
+    """Määrittää onko color html muodossa oleva väri
+    
+    Args:
+        color: merkkijono
+    """
     if not isinstance(color, str):
         return False
     if len(color) != 7 or color[0] != "#":
@@ -11,6 +16,18 @@ def is_valid_color(color):
     return True
 
 class Settings:
+    """Asetuksien säilyttämistä, lukemista ja tallentamista hoitava luokka
+
+    Attributes:
+        cfg: ConfigParser olio
+        freq: emulaattorin suoritusnopeus
+        keys: näppäinasetukset
+        entrypoint: emulaattorin ohjelman latausosoite
+        bgcolor: emulaattorin kuvan taustaväri
+        fgcolor: emulaattorin kuvan etuväri
+        mute: boolean joka kertoo onko äänet mykistetty
+    """
+
     def __init__(self, filename=None):
         self.cfg = configparser.ConfigParser()
         self.load_defaults()
@@ -18,6 +35,7 @@ class Settings:
             self.load(filename)
 
     def load_values_from_cfg(self):
+        """Lukee configparserin sisältämät arvot muuttujiin"""
         s = self.cfg["Settings"]
 
         self.freq = int(s["frequency"])
@@ -35,12 +53,17 @@ class Settings:
         if not is_valid_color(self.bgcolor):
             self.bgcolor = "#000000"
 
+        self.mute = s.getboolean("mute_sound")
+        
+
     def load(self, filename):
+        """Lukee asetukset tiedostosta"""
         self.cfg.read(filename)
         if "Settings" in self.cfg:
             self.load_values_from_cfg()
 
     def save(self, filename):
+        """Tallentaa asetukset tiedostoon"""
         s = self.cfg["Settings"]
         s["frequency"] = str(self.freq)
         s["entrypoint"] = str(self.entrypoint)
@@ -48,11 +71,14 @@ class Settings:
         s["bgcolor"] = self.bgcolor
         for i in range(16):
             s["key_{:01X}".format(i)] = self.keys[i]
+        
+        s["mute_sound"] = str(self.mute)
 
         with open(filename, "w") as f:
             self.cfg.write(f)
 
     def load_defaults(self):
+        """Lukee oletusasetukset"""
         self.cfg["Settings"] = {"frequency":10, "entrypoint":0x200,
                 "key_0":"0",
                 "key_1":"1",
@@ -71,7 +97,8 @@ class Settings:
                 "key_e":"t", 
                 "key_f":"y",
                 "fgcolor":"#ffffff",
-                "bgcolor":"#000000"}
+                "bgcolor":"#000000",
+                "mute_sound":"False"}
         self.load_values_from_cfg()
 
 
@@ -89,3 +116,6 @@ class Settings:
 
     def get_bgcolor(self):
         return self.bgcolor
+
+    def get_mute(self):
+        return self.mute

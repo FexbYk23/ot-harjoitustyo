@@ -3,8 +3,22 @@ import instructions
 
 
 class Instruction:
-    def __init__(self, opcode):
+    """Luokka, joka esittää konekäskyä
+        
+        Attributes:
+            op: konekäskyä vastaava funktio
+            raw: konekäskyn binaariesitys
+            arg1: käskyn ensimmäinen parametri
+            arg2: käskyn toinen parametri
+            arg3: käskyn kolmas parametri
 
+    """
+
+    def __init__(self, opcode):
+        """Luokan konstruktori, joka luo konekäskyn binääriesityksestä
+            Args:
+                opcode: binäärimuotoinen konekäsky
+        """
         self.op = instructions.instr_invalid
         self.raw = opcode
 
@@ -116,4 +130,9 @@ class Instruction:
                 self.op = instructions.instr_ld_vx_i
 
     def execute(self, chip8):
+        """Suorittaa konekäskyn
+
+        Args:
+            chip8: emulaattori
+        """
         self.op(self, chip8)
