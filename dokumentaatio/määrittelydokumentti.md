@@ -10,7 +10,7 @@ Sovelluksen avulla käyttäjä voi suorittaa CHIP8-järjestelmälle tehtyjä ohj
 - ohjelma jäljittelee CHIP8-järjestelmän toimintaa tarpeeksi tarkasti, jotta suurin osa ohjelmista toimisi
   - ohjelma suorittaa CHIP8-ohjelman sisältämiä konekäskyjä [tehty]
   - ohjelma näyttää CHIP8-ohjelman tuottamaa grafiikkaa [tehty]
-  - ohjelma toistaa CHIP8-ohjelman tuottamaa ääntä
+  - ohjelma toistaa CHIP8-ohjelman tuottamaa ääntä [tehty]
 - käyttäjä voi avata suoritettavan CHIP8-ohjelman tiedostosta graafisella käyttöliittymällä [tehty]
 - käyttäjä voi muuttaa asetuksia (kuten mitä näppäimiä emulaattori käyttää) grafisella käyttöliittymällä [tehty]
   - asetukset tallennetaan koneelle tiedostoon, josta ohjelma voi lukea ne käynnistyessään [tehty]
