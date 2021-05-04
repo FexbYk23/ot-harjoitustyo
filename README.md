@@ -6,7 +6,7 @@ Sovelluksen avulla käyttäjä voi suorittaa CHIP8-Järjestelmälle tehtyjä ohj
 [Määrittelydokumentti](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/m%C3%A4%C3%A4rittelydokumentti.md)  
 [Työaikakirjanpito](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/ty%C3%B6aikakirjanpito.md)  
 [Arkkitehtuuri](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/arkkitehtuuri.md)  
-
+[Release 1](https://github.com/FexbYk23/ot-harjoitustyo/releases/tag/viikko5)  
 
 
 ## Asennus
@@ -23,3 +23,6 @@ Testit voidaan suorittaa komennolla:
 
 Testikattavuusraportin voi generoida komennolla:  
 `poetry run invoke coverage-report`  
+
+Pylintin tarkistus voidaan suorittaa komennolla:
+`poetry run invoke lint`
