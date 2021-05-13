@@ -27,10 +27,15 @@ class ControlsDialog:
             self.key_entries.append(entry)
 
         tk.Button(self.window, text="OK", command=self.__ok).grid(columnspan=2, row=16, column=0)
+        self.window.protocol("WM_DELETE_WINDOW", self.__on_close)
 
+    def __on_close(self):
+        "Merkitsee valikon suljetuksi ja sulkee ikkunan"
+        self.dialogs.controls_open = False
+        self.window.destroy()
 
     def __ok(self):
-        """Tallentaa näppäimet cfg.hen"""
+        """Tallentaa näppäimet Settings olioon, päivittää asetustiedoston ja sulkee ikkunan"""
         for i in range(16):
             self.cfg.get_keybinds()[i] = self.key_entries[i].get()
         self.cfg.save("settings.cfg")

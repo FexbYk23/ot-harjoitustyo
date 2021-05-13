@@ -41,7 +41,8 @@ class SettingsDialog:
 
         tk.Button(self.window, text="OK", command=self.__ok).pack()
         tk.Button(self.window, text="Cancel", command=self.__close).pack()
-    
+        self.window.protocol("WM_DELETE_WINDOW", self.__close)
+
     def __create_entry(self, initial_value):
         """Luo tekstikentän"""
         e = tk.Entry(self.window)
