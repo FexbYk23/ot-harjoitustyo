@@ -5,14 +5,14 @@ import random
 def instr_invalid(inst, chip8):
     """Ei kelpaava komento joka pysäyttää järjestelmän"""
     chip8.halted = True
-    chip8.halt_reason = "invalid instruction {:04X} at 0x{:04X}".format(inst.raw, chip8.pc)
+    chip8.halt_reason = "invalid instruction {:04X} at 0x{:04X}".format(
+        inst.raw, chip8.pc)
 
 
 def instr_sys(inst, chip8):
     """Toteuttamaton komento, jonka pitäisi suorittaa koodia RCA 1802 -prosessorilla"""
     chip8.halted = True
     chip8.halt_reason = f"Unimplemented sys instruction at {chip8.pc:04X}"
-    pass
 
 
 def instr_cls(inst, chip8):
@@ -46,13 +46,15 @@ def instr_se3(inst, chip8):
 
 
 def instr_sne(inst, chip8):
-    """Ohittaa seuraavan konekäskyn jos valitun rekisterin arvo ei ole yhtäsuuri kuin valittu vakio"""
+    """Ohittaa seuraavan konekäskyn jos valitun rekisterin arvo ei ole yhtäsuuri
+    kuin valittu vakio"""
     if chip8.v[inst.arg1] != inst.arg2:
         chip8.pc += 2
 
 
 def instr_se5(inst, chip8):
-    """Ohittaa seuraavan konekäskyn jos valitun rekisterin arvo on yhtäsuuri kuin toisen valitun rekisterin arvo"""
+    """Ohittaa seuraavan konekäskyn jos valitun rekisterin arvo on yhtäsuuri
+    kuin toisen valitun rekisterin arvo"""
     if chip8.v[inst.arg1] == chip8.v[inst.arg2]:
         chip8.pc += 2
 
@@ -87,7 +89,8 @@ def instr_xor(inst, chip8):
 
 
 def instr_add8(inst, chip8):
-    """Lisää määrättyyn rekisteriin toisen määrätyn rekisterin arvon ja asettaa rekisteriin vf tiedon ylivuodosta
+    """Lisää määrättyyn rekisteriin toisen määrätyn rekisterin arvon
+    ja asettaa rekisteriin vf tiedon ylivuodosta
     """
     chip8.v[inst.arg1] += chip8.v[inst.arg2]
     if chip8.v[inst.arg1] > 0xFF:
@@ -98,7 +101,8 @@ def instr_add8(inst, chip8):
 
 
 def instr_sub(inst, chip8):
-    """Vähentää määrätystä rekisteristä toisen määrätyn rekisterin arvon ja asettaa rekisteriin vf tiedon alivuodosta
+    """Vähentää määrätystä rekisteristä toisen määrätyn rekisterin arvon
+    ja asettaa rekisteriin vf tiedon alivuodosta
     """
     chip8.v[inst.arg1] -= chip8.v[inst.arg2]
     if chip8.v[inst.arg1] < 0:
@@ -123,7 +127,8 @@ def instr_subn(inst, chip8):
 
 
 def instr_shl(inst, chip8):
-    """Siirtää määrätyn rekisterin bittejä vasemmalle yhdellä. Tallentaa hävinneen bitin arvon rekisteriin vf
+    """Siirtää määrätyn rekisterin bittejä vasemmalle yhdellä.
+    Tallentaa hävinneen bitin arvon rekisteriin vf
     """
     chip8.v[0xf] = chip8.v[inst.arg1] >> 7
     chip8.v[inst.arg1] <<= 1
@@ -153,29 +158,33 @@ def instr_drw(inst, chip8):
     chip8.v[0xf] = 0
     for i in range(inst.arg3):  # for each row in sprite
         rowdata = chip8.memory[chip8.i + i]
-        y = (chip8.v[inst.arg2] + i) % 32
+        _y = (chip8.v[inst.arg2] + i) % 32
         for j in range(8):
-            x = (chip8.v[inst.arg1] + j) % 64
+            _x = (chip8.v[inst.arg1] + j) % 64
             pixel = ((rowdata >> (7-j)) & 1)
-            if pixel and chip8.framebuf[y*64 + x]:
+            if pixel and chip8.framebuf[_y*64 + _x]:
                 chip8.v[0xf] = 1
-            chip8.framebuf[y*64 + x] ^= pixel
+            chip8.framebuf[_y*64 + _x] ^= pixel
 
 
 def instr_skp(inst, chip8):
-    """Ohittaa seuraavan komennon jos määrätyn rekisterin määräämä nappi on painettuna"""
+    """Ohittaa seuraavan komennon jos määrätyn rekisterin
+    määräämä nappi on painettuna"""
     if chip8.keys[chip8.v[inst.arg1]]:
         chip8.pc += 2
 
 
 def instr_sknp(inst, chip8):
-    """Ohittaa sueraavan komennon jos määrätyn rekisterin määräämä nappi ei ole painettuna"""
+    """Ohittaa sueraavan komennon jos määrätyn rekisterin
+    määräämä nappi ei ole painettuna"""
     if not chip8.keys[chip8.v[inst.arg1]]:
         chip8.pc += 2
+
 
 def instr_ld_vx_dt(inst, chip8):
     """Kopioi määrättyyn rekisteriin viiveajastimen arvon"""
     chip8.v[inst.arg1] = chip8.dt
+
 
 def instr_ld_dt(inst, chip8):
     """Kopioi viiveajastimeen määrätyn rekisterin arvon"""
@@ -183,7 +192,8 @@ def instr_ld_dt(inst, chip8):
 
 
 def instr_ld_key(inst, chip8):
-    """Pysäyttää suorituksen kunnes jotain nappia on painettu ja tallentaa painetun napin määrättyyn rekisteriin
+    """Pysäyttää suorituksen kunnes jotain nappia on painettu
+    ja tallentaa painetun napin määrättyyn rekisteriin
     """
     chip8.ld_key_reg = inst.arg1
 
@@ -201,7 +211,8 @@ def instr_add_i(inst, chip8):
 
 
 def instr_ld_f(inst, chip8):
-    """Tallentaa i rekisteriin määrätyn rekisterin sisältämän merkin osoitteen järjestelmän sisäisessä fontissa (Olettaen että fontii alkaa kohdasta 0 muistissa).
+    """Tallentaa i rekisteriin määrätyn rekisterin sisältämän merkin osoitteen
+    järjestelmän sisäisessä fontissa (Olettaen että fontii alkaa kohdasta 0 muistissa).
     """
     chip8.i = 5*chip8.v[inst.arg1]  # font address
 
@@ -209,10 +220,10 @@ def instr_ld_f(inst, chip8):
 def instr_ld_b(inst, chip8):
     """Tallentaa määrätyn rekisterin arvon BCD-koodattuna I-rekisterin määräämään paikkaan
     """
-    a = chip8.v[inst.arg1]
-    chip8.memory[chip8.i] = a // 100
-    chip8.memory[chip8.i+1] = (a // 10) % 10
-    chip8.memory[chip8.i+2] = a % 10
+    _a = chip8.v[inst.arg1]
+    chip8.memory[chip8.i] = _a // 100
+    chip8.memory[chip8.i+1] = (_a // 10) % 10
+    chip8.memory[chip8.i+2] = _a % 10
 
 
 def instr_ld_ptr_i(inst, chip8):

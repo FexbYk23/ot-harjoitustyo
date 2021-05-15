@@ -3,6 +3,7 @@ from tkinter import messagebox
 import settings
 import ui.dialog_manager
 
+
 class ControlsDialog:
     """Luokka joka kuvaa näppäinasetusvalikkoa
 
@@ -20,13 +21,15 @@ class ControlsDialog:
         self.key_entries = []
 
         for i in range(16):
-            tk.Label(self.window, text=f"Key {i:01X}:").grid(row=i, column=0, padx=(10, 0))
+            tk.Label(self.window, text=f"Key {i:01X}:").grid(
+                row=i, column=0, padx=(10, 0))
             entry = tk.Entry(self.window)
             entry.insert(tk.END, self.cfg.get_keybinds()[i])
             entry.grid(row=i, column=1, padx=(0, 10))
             self.key_entries.append(entry)
 
-        tk.Button(self.window, text="OK", command=self.__ok).grid(columnspan=2, row=16, column=0)
+        tk.Button(self.window, text="OK", command=self.__ok).grid(
+            columnspan=2, row=16, column=0)
         self.window.protocol("WM_DELETE_WINDOW", self.__on_close)
 
     def __on_close(self):
@@ -41,4 +44,3 @@ class ControlsDialog:
         self.cfg.save("settings.cfg")
         self.dialogs.controls_open = False
         self.window.destroy()
-

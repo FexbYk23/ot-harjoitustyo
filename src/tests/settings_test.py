@@ -1,6 +1,8 @@
-import tempfile, os
+import tempfile
+import os
 import unittest
 import settings
+
 
 class SettingsTester(unittest.TestCase):
 
@@ -23,11 +25,10 @@ class SettingsTester(unittest.TestCase):
     def test_load_constructor(self):
         d = tempfile.TemporaryDirectory()
         filename = os.path.join(d.name, "settings.cfg")
-        
+
         a = settings.Settings()
         a.freq = 200
         a.save(filename)
 
         s = settings.Settings(filename)
         self.assertEqual(s.get_frequency(), 200)
-

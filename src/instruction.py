@@ -4,7 +4,7 @@ import instructions
 
 class Instruction:
     """Luokka, joka esittää konekäskyä
-        
+
         Attributes:
             op: konekäskyä vastaava funktio
             raw: konekäskyn binaariesitys
@@ -25,7 +25,7 @@ class Instruction:
         if opcode == 0xE0:
             self.op = instructions.instr_cls
             return
-        elif opcode == 0xEE:
+        if opcode == 0xEE:
             self.op = instructions.instr_ret
             return
 

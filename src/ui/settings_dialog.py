@@ -4,7 +4,6 @@ import settings
 import ui.dialog_manager
 
 
-
 class SettingsDialog:
     """Luokka joka kuvaa asetusvalikkoa
 
@@ -26,8 +25,9 @@ class SettingsDialog:
             self.mute.set(0)
 
         tk.Label(self.window, text="Entrypoint:").pack()
-        self.entrypoint_entry = self.__create_entry(str(self.cfg.get_entrypoint()))
-        
+        self.entrypoint_entry = self.__create_entry(
+            str(self.cfg.get_entrypoint()))
+
         tk.Label(self.window, text="Emulation speed (Hz):").pack()
         self.freq_entry = self.__create_entry(str(self.cfg.get_frequency()))
 
@@ -36,8 +36,9 @@ class SettingsDialog:
 
         tk.Label(self.window, text="Background color:").pack()
         self.bgcolor_entry = self.__create_entry(self.cfg.get_bgcolor())
-        
-        tk.Checkbutton(self.window, text="Mute sound", variable=self.mute).pack()
+
+        tk.Checkbutton(self.window, text="Mute sound",
+                       variable=self.mute).pack()
 
         tk.Button(self.window, text="OK", command=self.__ok).pack()
         tk.Button(self.window, text="Cancel", command=self.__close).pack()
@@ -71,7 +72,8 @@ class SettingsDialog:
         """Tarkastaa onko asetukset kelvollisia ja luo virheilmoituksen jos ei"""
         try:
             if not 0 < int(self.freq_entry.get()) <= 1000:
-                messagebox.showinfo("Error", "Frequency must be between 1 and 1000")
+                messagebox.showinfo(
+                    "Error", "Frequency must be between 1 and 1000")
                 return False
         except ValueError:
             messagebox.showinfo("Error", "Frequency must be an integer.")
@@ -82,13 +84,14 @@ class SettingsDialog:
         except ValueError:
             messagebox.showinfo("Error", "Entrypoint must be an integer.")
             return False
-        
+
         if not settings.is_valid_color(self.fgcolor_entry.get()):
-            messagebox.showinfo("Error", "Foreground color is not a valid color")
+            messagebox.showinfo(
+                "Error", "Foreground color is not a valid color")
             return False
         if not settings.is_valid_color(self.bgcolor_entry.get()):
-            messagebox.showinfo("Error", "Background color is not a calid color")
+            messagebox.showinfo(
+                "Error", "Background color is not a calid color")
             return False
 
         return True
-

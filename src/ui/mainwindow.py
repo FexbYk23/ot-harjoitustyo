@@ -4,9 +4,11 @@ import tkinter.filedialog
 import chip8
 import ui.dialog_manager
 import settings
-import ui.settings_dialog, ui.controls_dialog
+import ui.settings_dialog
+import ui.controls_dialog
 from tkinter import messagebox
 import sound
+
 
 class MainWindow:
     """Ohjelman pääikkuna
@@ -27,19 +29,19 @@ class MainWindow:
     def __init__(self, root):
         self.root = root
         self.cfg = settings.Settings("settings.cfg")
-        
+
         self.__create_menu()
 
-        self.canvas = tk.Canvas(root, bg=self.cfg.get_bgcolor(), height=32*self.PIXEL_SIZE, width=64*self.PIXEL_SIZE)
+        self.canvas = tk.Canvas(root, bg=self.cfg.get_bgcolor(
+        ), height=32*self.PIXEL_SIZE, width=64*self.PIXEL_SIZE)
         self.canvas.pack()
-        
+
         self.dialogs = ui.dialog_manager.DialogManager()
         self.running = False
         self.paused = False
 
         self.music = sound.SoundPlayer()
-        self.chip8 = None    
-
+        self.chip8 = None
 
     def __create_menu(self):
         menubar = tk.Menu(self.root)
@@ -47,13 +49,14 @@ class MainWindow:
 
         menu1 = tk.Menu(menubar, tearoff=0)
         menu1.add_command(label="Open Program", command=self.__open_program)
-        menu1.add_command(label="Reset", command=self.__reset, state=tk.DISABLED)
-        menu1.add_command(label="Pause", command=self.__pause, state=tk.DISABLED)
+        menu1.add_command(
+            label="Reset", command=self.__reset, state=tk.DISABLED)
+        menu1.add_command(
+            label="Pause", command=self.__pause, state=tk.DISABLED)
         menu1.add_command(label="Settings", command=self.__open_settings)
         menu1.add_command(label="Controls", command=self.__open_controls)
         menubar.add_cascade(label="File", menu=menu1)
         self.__menu1 = menu1
-
 
     def __open_program(self):
         """Avaa käyttöliittymän josta käyttäjä voi valita suoritettavan ohjelman sisältävän tiedoston. Aloittaa ohjelman suorittamisen, jos tiedosto valitaan.
@@ -84,7 +87,8 @@ class MainWindow:
                 if self.chip8.framebuf[y*64 + x]:
                     sx = x*PIXEL
                     sy = y*PIXEL
-                    c.create_rectangle(sx, sy, sx+PIXEL, sy+PIXEL, fill=fgcolor)
+                    c.create_rectangle(
+                        sx, sy, sx+PIXEL, sy+PIXEL, fill=fgcolor)
 
     def __update_keys_from_event(self, key, pressed):
         bindings = self.cfg.get_keybinds()
@@ -97,16 +101,17 @@ class MainWindow:
 
     def __on_keyrelease_event(self, e):
         self.__update_keys_from_event(e.keysym, False)
-    
+
     def mainloop(self):
         """Päivittää emulaattorin kuvan, äänen, ajastimet ja suorittaa konekäskyjä"""
         if not self.running or self.paused:
             self.root.after(200, self.mainloop)
             return
-        
+
         if self.chip8.halted:
             self.running = False
-            messagebox.showinfo("Error", "Chip8 halted:\n"+self.chip8.halt_reason)
+            messagebox.showinfo(
+                "Error", "Chip8 halted:\n"+self.chip8.halt_reason)
             self.root.after(200, self.mainloop)
 
         self.chip8.exec_next()
@@ -125,13 +130,15 @@ class MainWindow:
         """Avaa asetusvalikon"""
         if not self.dialogs.settings_open:
             self.dialogs.settings_open = True
-            ui.settings_dialog.SettingsDialog(self.root, self.cfg, self.dialogs)
-    
+            ui.settings_dialog.SettingsDialog(
+                self.root, self.cfg, self.dialogs)
+
     def __open_controls(self):
         """Avaa näppäinasetukset"""
         if not self.dialogs.controls_open:
             self.dialogs.controls_open = True
-            ui.controls_dialog.ControlsDialog(self.root, self.cfg, self.dialogs)
+            ui.controls_dialog.ControlsDialog(
+                self.root, self.cfg, self.dialogs)
 
     def __reset(self):
         """Aloittaa emulaation alusta"""
@@ -142,7 +149,7 @@ class MainWindow:
     def __pause(self):
         """Pysäyttää/jatkaa emulaatiota"""
         self.paused = not self.paused
-    
+
     def __enable_pause_reset(self):
         """Aktivoi pause ja reset valinnat"""
         self.__menu1.entryconfig(1, state=tk.NORMAL)

@@ -1,8 +1,9 @@
 import configparser
 
+
 def is_valid_color(color):
     """Määrittää onko color html muodossa oleva väri
-    
+
     Args:
         color: merkkijono
     """
@@ -14,6 +15,7 @@ def is_valid_color(color):
         if not color[i] in "0123456789abcdefABCDEF":
             return False
     return True
+
 
 class Settings:
     """Asetuksien säilyttämistä, lukemista ja tallentamista hoitava luokka
@@ -30,31 +32,38 @@ class Settings:
 
     def __init__(self, filename=None):
         self.cfg = configparser.ConfigParser()
+
+        self.freq = None
+        self.keys = None
+        self.entrypoint = None
+        self.fgcolor = None
+        self.bgcolor = None
+        self.mute = None
         self.load_defaults()
-        if filename != None:
+
+        if filename is not None:
             self.load(filename)
 
     def load_values_from_cfg(self):
         """Lukee configparserin sisältämät arvot muuttujiin"""
-        s = self.cfg["Settings"]
+        _s = self.cfg["Settings"]
 
-        self.freq = int(s["frequency"])
+        self.freq = int(_s["frequency"])
         self.freq = min(max(self.freq, 1), 1000)
-        self.keys = [s["key_{:01X}".format(i)] for i in range(16)]
-        
-        self.entrypoint = int(s["entrypoint"])
+        self.keys = [_s["key_{:01X}".format(i)] for i in range(16)]
+
+        self.entrypoint = int(_s["entrypoint"])
         self.entrypoint = min(max(self.entrypoint, 0), 0x1000 - 2)
-        
-        self.fgcolor = s["fgcolor"]
+
+        self.fgcolor = _s["fgcolor"]
         if not is_valid_color(self.fgcolor):
             self.fgcolor = "#ffffff"
-        
-        self.bgcolor = s["bgcolor"]
+
+        self.bgcolor = _s["bgcolor"]
         if not is_valid_color(self.bgcolor):
             self.bgcolor = "#000000"
 
-        self.mute = s.getboolean("mute_sound")
-        
+        self.mute = _s.getboolean("mute_sound")
 
     def load(self, filename):
         """Lukee asetukset tiedostosta"""
@@ -64,43 +73,42 @@ class Settings:
 
     def save(self, filename):
         """Tallentaa asetukset tiedostoon"""
-        s = self.cfg["Settings"]
-        s["frequency"] = str(self.freq)
-        s["entrypoint"] = str(self.entrypoint)
-        s["fgcolor"] = self.fgcolor
-        s["bgcolor"] = self.bgcolor
+        _s = self.cfg["Settings"]
+        _s["frequency"] = str(self.freq)
+        _s["entrypoint"] = str(self.entrypoint)
+        _s["fgcolor"] = self.fgcolor
+        _s["bgcolor"] = self.bgcolor
         for i in range(16):
-            s["key_{:01X}".format(i)] = self.keys[i]
-        
-        s["mute_sound"] = str(self.mute)
+            _s["key_{:01X}".format(i)] = self.keys[i]
 
-        with open(filename, "w") as f:
-            self.cfg.write(f)
+        _s["mute_sound"] = str(self.mute)
+
+        with open(filename, "w") as _f:
+            self.cfg.write(_f)
 
     def load_defaults(self):
         """Lukee oletusasetukset"""
-        self.cfg["Settings"] = {"frequency":10, "entrypoint":0x200,
-                "key_0":"0",
-                "key_1":"1",
-                "key_2":"2",
-                "key_3":"3", 
-                "key_4":"4", 
-                "key_5":"5",
-                "key_6":"6",
-                "key_7":"7",
-                "key_8":"8",
-                "key_9":"9",
-                "key_a":"q",
-                "key_b":"w",
-                "key_c":"e",
-                "key_d":"r",
-                "key_e":"t", 
-                "key_f":"y",
-                "fgcolor":"#ffffff",
-                "bgcolor":"#000000",
-                "mute_sound":"False"}
+        self.cfg["Settings"] = {"frequency": 10, "entrypoint": 0x200,
+                                "key_0": "0",
+                                "key_1": "1",
+                                "key_2": "2",
+                                "key_3": "3",
+                                "key_4": "4",
+                                "key_5": "5",
+                                "key_6": "6",
+                                "key_7": "7",
+                                "key_8": "8",
+                                "key_9": "9",
+                                "key_a": "q",
+                                "key_b": "w",
+                                "key_c": "e",
+                                "key_d": "r",
+                                "key_e": "t",
+                                "key_f": "y",
+                                "fgcolor": "#ffffff",
+                                "bgcolor": "#000000",
+                                "mute_sound": "False"}
         self.load_values_from_cfg()
-
 
     def get_frequency(self):
         return self.freq

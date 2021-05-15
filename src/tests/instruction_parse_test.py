@@ -97,7 +97,7 @@ class TestInstruction(unittest.TestCase):
 
     def test_parse_ld_dt(self):
         self.assertEqual(Instruction(0xF015).op, instructions.instr_ld_dt)
-    
+
     def test_parse_ld_st(self):
         self.assertEqual(Instruction(0xF018).op, instructions.instr_ld_st)
 

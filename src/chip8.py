@@ -7,7 +7,28 @@ class Chip8:
 
     def __init__(self):
         self.memory = [0 for i in range(0x1000)]
-        self.reset(0)
+
+        self.__load_font()
+        self.framebuf = [False for i in range(64 * 32)]
+        self.keys = [False for i in range(16)]
+
+        # Registers
+        self.v = [0 for i in range(16)]
+        self.i = 0
+        self.pc = 0
+        self.sp = 0x100
+
+        # Timers
+        self.dt = 0
+        self.st = 0
+
+        # Set to Vx on instruction Fx0A
+        # If not -1, halt execution until a keypress and store it to Vx
+        self.ld_key_reg = -1
+
+        self.debug_print = False
+        self.halted = False
+        self.halt_reason = ""
 
     def reset(self, entrypoint=512):
         """Alustaa kaiken paitsi muistin"""
@@ -28,11 +49,11 @@ class Chip8:
         # Set to Vx on instruction Fx0A
         # If not -1, halt execution until a keypress and store it to Vx
         self.ld_key_reg = -1
-        
+
         self.debug_print = False
         self.halted = False
         self.halt_reason = ""
-    
+
     def __load_font(self):
         """Kopioi fonttidatan emulaattorin muistiin kohtaan 0
         """
@@ -55,8 +76,10 @@ class Chip8:
                 0xF0, 0x80, 0xF0, 0x80, 0x80  # F
                 ]
 
-        for i in range(len(font)):
-            self.memory[i] = font[i]
+        i = 0
+        for _x in font:
+            self.memory[i] = _x
+            i += 1
 
     def load_program(self, program, entrypoint):
         """Lukee ohjelman listasta muistiin
@@ -64,20 +87,21 @@ class Chip8:
             program: lista joka sisältää ohjelman
             entrypoint: kohta muistissa, johon ohjelma kopioidaan
         """
-        for i in range(len(program)):
-            self.memory[entrypoint + i] = program[i]
+        i = 0
+        for _x in program:
+            self.memory[entrypoint + i] = _x
+            i += 1
         self.pc = entrypoint
-    
+
     def load_program_file(self, filename, entrypoint):
         """Lukee ohjelman tiedostosta muistiin
         Args:
             filename: polku tiedostoon
             entrypoint: kohta muistissa, johon ohjelma kopioidaan
         """
-        with open(filename, "rb") as f:
-            program = f.read(0x1000-entrypoint)
+        with open(filename, "rb") as _f:
+            program = _f.read(0x1000-entrypoint)
             self.load_program(program, entrypoint)
-
 
     def write_word(self, addr, data):
         """Kirjoittaa 16 bittiä muistiin
@@ -117,19 +141,17 @@ class Chip8:
                     if self.debug_print:
                         print("Chip8: Key pressed:", i, self.keys)
                     break
-            
+
             if self.ld_key_reg != -1:
                 if self.debug_print:
                     print("Chip8: Waiting for keypress", self.keys)
                 return
-
 
         inst = instruction.Instruction(self.read_word(self.pc))
 
         if self.debug_print:
             print("PC:", self.pc, " Registers:", self.v)
             print("Opcode: ", inst.op)
-            pass
         self.pc += 2
         inst.execute(self)
 
@@ -141,4 +163,3 @@ class Chip8:
 
         if self.st > 0:
             self.st -= 1
-

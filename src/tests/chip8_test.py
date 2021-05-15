@@ -1,6 +1,7 @@
 import unittest
 import chip8
 
+
 class Chip8Tester(unittest.TestCase):
 
     def test_load_program(self):
@@ -12,11 +13,11 @@ class Chip8Tester(unittest.TestCase):
 
     def test_exec_next(self):
         c8 = chip8.Chip8()
-        
+
         program = [
-                0x60, 0x01,  #v0 = 1
-                0xFF, 0xFF  #undefined
-                ]
+            0x60, 0x01,  # v0 = 1
+            0xFF, 0xFF  # undefined
+        ]
 
         c8.load_program(program, 512)
         c8.exec_next()
@@ -33,8 +34,8 @@ class Chip8Tester(unittest.TestCase):
     def test_ld_key_reg(self):
         c8 = chip8.Chip8()
         program = [
-                0xF1, 0x0A, #v1 = keypress
-                ]
+            0xF1, 0x0A,  # v1 = keypress
+        ]
         c8.load_program(program, 512)
         c8.exec_next()
         c8.exec_next()
@@ -43,5 +44,3 @@ class Chip8Tester(unittest.TestCase):
         c8.exec_next()
         self.assertEqual(c8.pc, 516)
         self.assertEqual(c8.v[1], 10)
-        
-

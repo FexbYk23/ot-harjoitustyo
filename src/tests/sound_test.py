@@ -1,6 +1,7 @@
 import unittest
 import sound
 
+
 class SoundTester(unittest.TestCase):
     def test_init(self):
         s = sound.SoundPlayer()
