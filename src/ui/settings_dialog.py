@@ -73,14 +73,16 @@ class SettingsDialog:
         try:
             if not 0 < int(self.freq_entry.get()) <= 1000:
                 messagebox.showinfo(
-                    "Error", "Frequency must be between 1 and 1000")
+                    "Error", "Frequency must be between 1 and 1000.")
                 return False
         except ValueError:
             messagebox.showinfo("Error", "Frequency must be an integer.")
             return False
 
         try:
-            int(self.entrypoint_entry.get())
+            if not 0 <= int(self.entrypoint_entry.get()) <= 0x1000-2:
+                messagebox.showinfo("Error", "Entrypoint must be between 0 and 4094.")
+                return False
         except ValueError:
             messagebox.showinfo("Error", "Entrypoint must be an integer.")
             return False

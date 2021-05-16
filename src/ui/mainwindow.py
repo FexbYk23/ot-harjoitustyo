@@ -7,7 +7,7 @@ import settings
 import ui.settings_dialog
 import ui.controls_dialog
 from tkinter import messagebox
-import sound
+import sound_player
 
 
 class MainWindow:
@@ -40,7 +40,10 @@ class MainWindow:
         self.running = False
         self.paused = False
 
-        self.music = sound.SoundPlayer()
+        self.music = sound_player.SoundPlayer()
+        if not self.music.available:
+            messagebox.showinfo("Warning","Sound playback is not available.")
+
         self.chip8 = None
 
     def __create_menu(self):
@@ -124,7 +127,7 @@ class MainWindow:
             else:
                 self.music.stop_beep()
 
-        self.root.after(int(1000/self.cfg.get_frequency()), self.mainloop)
+        self.root.after(int(1000 / self.cfg.get_frequency()), self.mainloop)
 
     def __open_settings(self):
         """Avaa asetusvalikon"""

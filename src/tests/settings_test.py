@@ -9,7 +9,10 @@ class SettingsTester(unittest.TestCase):
     def test_initial(self):
         s = settings.Settings()
         self.assertEqual(s.get_entrypoint(), 0x200)
-        self.assertEqual(s.get_frequency(), 10)
+        self.assertEqual(s.get_frequency(), 300)
+        self.assertEqual(s.get_bgcolor(), "#000000")
+        self.assertEqual(s.get_fgcolor(), "#ffffff")
+        self.assertFalse(s.get_mute())
 
     def test_save_load(self):
         d = tempfile.TemporaryDirectory()

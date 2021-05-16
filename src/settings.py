@@ -48,11 +48,17 @@ class Settings:
         """Lukee configparserin sisältämät arvot muuttujiin"""
         _s = self.cfg["Settings"]
 
-        self.freq = int(_s["frequency"])
+        try:
+            self.freq = int(_s["frequency"])
+        except:
+            self.freq = 300
         self.freq = min(max(self.freq, 1), 1000)
         self.keys = [_s["key_{:01X}".format(i)] for i in range(16)]
 
-        self.entrypoint = int(_s["entrypoint"])
+        try:
+            self.entrypoint = int(_s["entrypoint"])
+        except:
+            self.entrypoint = 512
         self.entrypoint = min(max(self.entrypoint, 0), 0x1000 - 2)
 
         self.fgcolor = _s["fgcolor"]
@@ -63,7 +69,10 @@ class Settings:
         if not is_valid_color(self.bgcolor):
             self.bgcolor = "#000000"
 
-        self.mute = _s.getboolean("mute_sound")
+        try:
+            self.mute = _s.getboolean("mute_sound")
+        except:
+            self.mute = False
 
     def load(self, filename):
         """Lukee asetukset tiedostosta"""
@@ -88,7 +97,7 @@ class Settings:
 
     def load_defaults(self):
         """Lukee oletusasetukset"""
-        self.cfg["Settings"] = {"frequency": 10, "entrypoint": 0x200,
+        self.cfg["Settings"] = {"frequency": 300, "entrypoint": 0x200,
                                 "key_0": "0",
                                 "key_1": "1",
                                 "key_2": "2",

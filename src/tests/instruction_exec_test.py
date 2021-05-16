@@ -70,6 +70,20 @@ class TestInstructionExec(unittest.TestCase):
         self.assertEqual(c8.v[2], 0)
         self.assertEqual(c8.v[15], 1)
 
+    def test_exec_bitwise(self):
+        c8 = self.chip
+        c8.v[0] = 5
+        c8.v[1] = 3
+        c8_exe(0x8011, c8) #v0 |= v1
+        self.assertEqual(c8.v[0], 7)
+
+        c8_exe(0x8012, c8) #v0 &= v1
+        self.assertEqual(c8.v[0], 3)
+
+        c8_exe(0x8003, c8) #v0 ^= v0
+        self.assertEqual(c8.v[0], 0)
+        self.assertEqual(c8.v[1], 3)
+
     def test_exec_fx33(self):
         c8 = self.chip
         c8_exe(0x60FE, c8)  # v0 = ff

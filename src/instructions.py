@@ -111,14 +111,16 @@ def instr_sub(inst, chip8):
 
 
 def instr_shr(inst, chip8):
+    """Siirtää määrätyn rekisterin bittejä yhden vasemmalle
+    ja tallentaa menetetyn bitin arvon rekisteriin vf"""
     chip8.v[0xf] = chip8.v[inst.arg1] & 1
     chip8.v[inst.arg1] >>= 1
 
 
 def instr_subn(inst, chip8):
     chip8.v[inst.arg1] = chip8.v[inst.arg2] - chip8.v[inst.arg1]
-    if chip8.v[inst.arg2] < 0:
-        chip8.v[inst.arg2] &= 0xFF
+    if chip8.v[inst.arg1] < 0:
+        chip8.v[inst.arg1] &= 0xFF
         chip8.v[0xf] = 0
     else:
         chip8.v[0xf] = 1
@@ -153,6 +155,9 @@ def instr_rnd(inst, chip8):
 
 
 def instr_drw(inst, chip8):
+    """Piirtää I rekisterin osoittamassa
+    muistipaikassa olevan spriten ruudulle
+    komennon määräämiin koordinaatteihin"""
     chip8.v[0xf] = 0
     for i in range(inst.arg3):  # for each row in sprite
         rowdata = chip8.memory[chip8.i + i]

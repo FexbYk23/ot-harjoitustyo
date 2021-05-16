@@ -7,7 +7,7 @@ class Instruction:
 
         Attributes:
             op: konekäskyä vastaava funktio
-            raw: konekäskyn binaariesitys
+            raw: konekäskyn binääriesitys
             arg1: käskyn ensimmäinen parametri
             arg2: käskyn toinen parametri
             arg3: käskyn kolmas parametri
@@ -133,6 +133,6 @@ class Instruction:
         """Suorittaa konekäskyn
 
         Args:
-            chip8: emulaattori
+            chip8: Chip8 olio
         """
         self.op(self, chip8)
