@@ -24,7 +24,7 @@ Avaa ikkunan, jossa voit muuttaa emulaattorin käyttämiä näppäimiä.
 
 
 ## Settings-ikkuna
-![](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/settings.png)  
+![](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/settings_dialog.png)  
 Tässä ikkunassa voit muuttaa emulaattorin asetuksia. Asetukset tallennetaan settings.cfg nimiseen tiedostoon, josta ne myös luetaan ohjelman käynnistyessä.  
 Voit tallentaa asetukset ja sulkea ikkunan painamalla OK-näppäintä. Ikkunan sulkeminen muuten ei tallenna asetuksia.
 Vaihtoehdot:  
