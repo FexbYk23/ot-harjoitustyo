@@ -4,15 +4,13 @@ import random
 
 def instr_invalid(inst, chip8):
     """Ei kelpaava komento joka pysäyttää järjestelmän"""
-    chip8.halted = True
-    chip8.halt_reason = "invalid instruction {:04X} at 0x{:04X}".format(
-        inst.raw, chip8.pc)
+    chip8.halt_system("invalid instruction {:04X} at 0x{:04X}".format(
+        inst.raw, chip8.pc))
 
 
 def instr_sys(inst, chip8):
     """Toteuttamaton komento, jonka pitäisi suorittaa koodia RCA 1802 -prosessorilla"""
-    chip8.halted = True
-    chip8.halt_reason = f"Unimplemented sys instruction at {chip8.pc:04X}"
+    chip8.halt_system(f"Unimplemented sys instruction at {chip8.pc:04X}")
 
 
 def instr_cls(inst, chip8):
@@ -118,7 +116,7 @@ def instr_shr(inst, chip8):
 
 
 def instr_subn(inst, chip8):
-    chip8.v[inst.arg1] = chip8.v[inst.arg2] - chip8.v[inst.arg2]
+    chip8.v[inst.arg1] = chip8.v[inst.arg2] - chip8.v[inst.arg1]
     if chip8.v[inst.arg2] < 0:
         chip8.v[inst.arg2] &= 0xFF
         chip8.v[0xf] = 0
@@ -221,6 +219,9 @@ def instr_ld_b(inst, chip8):
     """Tallentaa määrätyn rekisterin arvon BCD-koodattuna I-rekisterin määräämään paikkaan
     """
     _a = chip8.v[inst.arg1]
+    if chip8.i + 2 >= len(chip8.memory):
+        chip8.halt_system("Out of bounds BCD write")
+        return
     chip8.memory[chip8.i] = _a // 100
     chip8.memory[chip8.i+1] = (_a // 10) % 10
     chip8.memory[chip8.i+2] = _a % 10
@@ -229,6 +230,9 @@ def instr_ld_b(inst, chip8):
 def instr_ld_ptr_i(inst, chip8):
     """Kopioi I-rekisterin määräämään osoitteeseen määrättyjen rekisterien arvot"""
     for i in range(inst.arg1 + 1):
+        if chip8.i + i >= len(chip8.memory):
+            chip8.halt_system("Out of bounds register write")
+            return
         chip8.memory[chip8.i + i] = chip8.v[i]
 
 
@@ -236,4 +240,8 @@ def instr_ld_vx_i(inst, chip8):
     """Kopioi määrättyihin rekistereihin I-rekisterin määräämästä osoitteesta arvoja
     """
     for i in range(inst.arg1 + 1):
+        if chip8.i + i >= len(chip8.memory):
+            chip8.halt_system("Out of bounds register read")
+            return
+
         chip8.v[i] = chip8.memory[chip8.i + i]

@@ -80,6 +80,11 @@ class TestInstructionExec(unittest.TestCase):
         self.assertEqual(c8.memory[0x802], 4)
         self.assertEqual(c8.i, 0x800)
         self.assertEqual(c8.v[0], 0xFE)
+        
+        c8.i = 0xFFF
+        c8_exe(0xF033, c8) #BCD
+        self.assertTrue(c8.halted)
+        
 
     def test_exec_fx55(self):
         c8 = self.chip
@@ -95,3 +100,21 @@ class TestInstructionExec(unittest.TestCase):
         self.assertEqual(c8.i, 0x800)
         for i in range(8):
             self.assertEqual(c8.memory[c8.i+i], c8.v[i])
+
+    def test_exec_subn(self):
+        c8 = self.chip
+        c8.v[0] = 10
+        c8.v[1] = 81
+        c8_exe(0x8017, c8)  # v0 = v1 - v0
+        self.assertEqual(c8.v[0], 81 - 10)
+
+    def test_exec_add8(self):
+        c8 = self.chip
+        c8.v[0] = 10
+        c8.v[1] = 130
+        c8_exe(0x8014, c8) #v0 += v1
+        self.assertEqual(c8.v[0], 130 + 10)
+        self.assertEqual(c8.v[15], 0)
+        c8_exe(0x8014, c8) #v0 += v1
+        self.assertEqual(c8.v[15], 1)
+

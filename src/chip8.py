@@ -110,10 +110,10 @@ class Chip8:
             data: kirjoitettava arvo
         """
         if addr + 1 >= len(self.memory):
-            self.halted = True
-            self.halt_reason = f"Out of bounds write to {addr}"
-        self.memory[addr + 1] = data & 0xFF
-        self.memory[addr] = data >> 8
+            self.halt_system(f"Out of bounds write to {addr}")
+        else:
+            self.memory[addr + 1] = data & 0xFF
+            self.memory[addr] = data >> 8
 
     def read_word(self, addr):
         """Lukee 16 bittiä muistista
@@ -121,8 +121,8 @@ class Chip8:
             addr: muistiosoite
         """
         if addr + 1 >= len(self.memory):
-            self.halted = True
-            self.halt_reason = f"Out of bounds read from {addr}"
+            self.halt_system(f"Out of bounds read from {addr}")
+            return 0
         return self.memory[addr + 1] | (self.memory[addr] << 8)
 
     def exec_next(self):
@@ -163,3 +163,7 @@ class Chip8:
 
         if self.st > 0:
             self.st -= 1
+
+    def halt_system(self, reason):
+        self.halted = True
+        self.halt_reason = reason
