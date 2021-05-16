@@ -11,9 +11,11 @@ Näiden lisäksi on vielä TestSettings, joka testaa asetuksista vastaavaa Setti
 
 
 ## Testikattavuus
-Käyttöliittymää ja testejä huomioimatta ohjelman testikattavuus on 85%
+Käyttöliittymää ja testejä huomioimatta ohjelman testikattavuus on 85%  
 ![](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/coverage.png)  
 
 Testejen ulkopuolelle jäi muutamien konekäskyjen suorittaminen, virheellisten asetusten lukeminen ja chip8 ohjelmien lukeminen tiedostosta, sekä koko SoundPlayer luokka, koska en keksinyt siinä mitään testattavaa.
 
 
+## Asennus
+Kokeilin ohjelman lataamista ja asentamista README.md:n ohjeiden mukaisesti fuksilaitteella.
