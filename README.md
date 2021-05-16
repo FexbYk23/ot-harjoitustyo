@@ -6,17 +6,16 @@ Sovelluksen avulla käyttäjä voi suorittaa CHIP8-Järjestelmälle tehtyjä ohj
 [Määrittelydokumentti](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/m%C3%A4%C3%A4rittelydokumentti.md)  
 [Työaikakirjanpito](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/ty%C3%B6aikakirjanpito.md)  
 [Arkkitehtuuri](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/arkkitehtuuri.md)  
+[Testaus](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/testaus.md)  
+[Käyttöohje](https://github.com/FexbYk23/ot-harjoitustyo/blob/master/dokumentaatio/k%C3%A4ytt%C3%B6ohje.md)  
 [Release 1](https://github.com/FexbYk23/ot-harjoitustyo/releases/tag/viikko5)  
 [Release 2](https://github.com/FexbYk23/ot-harjoitustyo/releases/tag/viikko6)  
 
 ## Asennus
-1. Saatat joutua asentamaan portaudio kirjaston, jotta pyaudio asentuu oikein. Portaudion voi asentaa Linux koneilla komennolla:  
-`sudo apt-get install portaudio19-dev`  
-
-2. Asenna riippuvuudet komennolla:   
+1. Asenna riippuvuudet komennolla:   
 `poetry install`  
 
-3. Suorita sovellus komennolla:  
+2. Suorita sovellus komennolla:  
 `poetry run invoke start`  
 
 
